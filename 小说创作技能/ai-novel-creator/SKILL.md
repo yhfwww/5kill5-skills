@@ -1,6 +1,12 @@
 ---
 name: ai-novel-creator
-description: AI小说创作助手，提供结构化提示词模板与分章写作指导，支持8000-20000字短篇小说创作
+version: "1.0.0"
+description: "AI小说创作助手，提供结构化提示词模板、三幕结构规划、角色设定、分章写作指导和连贯性质量检查，支持8000-20000字短篇小说创作。Use when the user asks to write, plan, outline, continue, revise, or quality-check a short novel or story, including 悬疑、言情、科幻、奇幻等类型创作。"
+argument-hint: "ai-novel-creator 写一篇10000字悬疑短篇 | ai-novel-creator 先整理角色和8章大纲 | ai-novel-creator 检查这几章的连贯性"
+homepage: https://github.com/yhfwww/5kill5-skills
+repository: https://github.com/yhfwww/5kill5-skills/tree/main/%E5%B0%8F%E8%AF%B4%E5%88%9B%E4%BD%9C%E6%8A%80%E8%83%BD/ai-novel-creator
+author: yhfwww
+license: Apache-2.0
 ---
 
 # AI小说创作助手

@@ -1,0 +1,114 @@
+{
+  "_comment": "人类化写作助手 - 用户配置文件",
+  "_version": "1.0",
+  "_last_updated": "2024-02-25",
+
+  "user_profile": {
+    "basic_info": {
+      "name": "用户昵称",
+      "writing_experience": "beginner | intermediate | advanced",
+      "primary_domains": ["科技", "生活", "教育"],
+      "target_audience": ["专业人士", "普通读者", "学生"]
+    },
+
+    "expression_style": {
+      "formal_level": 0.6,
+      "_comment_formal_level": "正式程度: 0=非常口语, 1=非常正式",
+
+      "slang_usage": 0.3,
+      "_comment_slang_usage": "俚语使用频率: 0=从不, 1=经常",
+
+      "sentence_pattern": "mixed",
+      "_comment_sentence_pattern": "句子模式: uniform=均匀, mixed=混合, varied多变",
+
+      "favorite_words": ["贼", "挺", "那啥", "这波", "绝了"],
+      "_comment_favorite_words": "常用词汇列表",
+
+      "aversion_words": ["务必", "竭诚", "予以", "以此"],
+      "_comment_aversion_words": "避免使用的词汇"
+    },
+
+    "cognitive_level": {
+      "abstract_preference": 0.4,
+      "_comment_abstract_preference": "抽象偏好: 0=喜欢具体, 1=喜欢抽象",
+
+      "example_preference": 0.8,
+      "_comment_example_preference": "例子偏好: 0=不喜欢例子, 1=喜欢大量例子",
+
+      "detail_level": 0.7,
+      "_comment_detail_level": "细节程度: 0=简洁, 1=详细",
+
+      "humor_level": 0.5,
+      "_comment_humor_level": "幽默程度: 0=严肃, 1=幽默"
+    },
+
+    "writing_preferences": {
+      "avoid_definitions": true,
+      "_comment": "避免抽象定义",
+
+      "keep_imperfections": true,
+      "_comment": "保留不完美表达",
+
+      "emotional_expression": "moderate",
+      "_comment_emotional_expression": "情感表达程度: low | moderate | high",
+
+      "personal_experience": true,
+      "_comment": "使用个人经验",
+
+      "show_consequences": true,
+      "_comment": "展示表达后果/风险",
+
+      "avoid_cliches": true,
+      "_comment": "避免陈词滥调",
+
+      "prefer_concrete": true,
+      "_comment": "优先具体而非抽象"
+    },
+
+    "embodiment_level": {
+      "use_body_sensations": true,
+      "_comment": "使用身体感受（如'我感到...'）",
+
+      "use_context_specific": true,
+      "_comment": "使用具体情境",
+
+      "use_personal_stories": true,
+      "_comment": "使用个人故事",
+
+      "show_vulnerability": true,
+      "_comment": "展示脆弱性（承认失败、缺陷）"
+    },
+
+    "ai_detection_concern": {
+      "need_avoid_detection": false,
+      "_comment": "是否需要避免AI检测",
+
+      "burstiness_level": 0.6,
+      "_comment": "突发度: 0=一致, 1=高度变化",
+
+      "perplexity_level": 0.5,
+      "_comment": "困惑度: 0=可预测, 1=不可预测"
+    },
+
+    "learning_history": [
+      {
+        "date": "2024-02-25",
+        "feedback": "用户喜欢口语化的表达，不喜欢过于正式的措辞",
+        "accepted_changes": ["使用'贼'代替'非常'", "省略主语"],
+        "rejected_changes": ["使用网络用语"],
+        "style_adjustment": {
+          "formal_level": -0.1,
+          "slang_usage": +0.1
+        }
+      }
+    ],
+    "_comment_learning_history": "学习历史记录，每次使用后更新"
+  },
+
+  "_usage_guide": {
+    "initialization": "首次使用时，通过问答收集用户信息并填写此配置",
+    "storage_location": "建议保存为 ~/.human-writing-config.json 或项目根目录 .human-writing-config.json",
+    "updating": "每次使用后，根据用户反馈更新配置文件",
+    "version_control": "建议使用Git管理配置文件，便于追溯学习历史"
+  }
+}

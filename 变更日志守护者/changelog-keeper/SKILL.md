@@ -1,7 +1,7 @@
 ---
 name: changelog-keeper
-version: 1.0.3
-description: Vibe Coding 变更日志守护者 — 在多步骤 AI 编程迭代中，自动感知并记录重大代码改动，在项目目录下维护三个文件：CHANGELOG_FOR_AGENT.md（Agent 技术向记录）、CHANGELOG_FOR_HUMAN.md（GitHub 风格人类向记录）和 PROJECT_STATE.md（项目当前状态快照）。让后续 Agent 接手时能立即理解项目演进历史。当用户说"记录这次改动"、"checkpoint"、"保存进度"、"写入日志"、"更新 changelog"时必须触发。当 Agent 自身完成了架构变更、新增核心功能、修改 API 接口、重构模块、修复关键 Bug、引入新依赖时，应主动判断是否触发。在任何 vibe coding 场景下，只要涉及代码项目的持续迭代，都应在合适时机使用本 Skill。
+version: 1.0.4
+description: Vibe Coding 变更日志守护者 — 在多步骤 AI 编程迭代中，自动感知并记录重大代码改动，在项目目录下维护三个文件：CHANGELOG_FOR_AGENT.md（Agent 技术向记录）、CHANGELOG_FOR_HUMAN.md（GitHub 风格人类向记录）和 PROJECT_STATE.md（项目当前状态快照）。让后续 Agent 接手时能立即理解项目演进历史。当用户说"记录这次改动"、"checkpoint"、"保存进度"、"写入日志"、"更新 changelog"、"初始化 changelog"时必须触发。当 Agent 自身完成了架构变更、新增核心功能、修改 API 接口、重构模块、修复关键 Bug、引入新依赖时，应主动判断是否触发。在任何 vibe coding 场景下，只要涉及代码项目的持续迭代，都应在合适时机使用本 Skill。
 homepage: https://github.com/yhfwww/5kill5-skills
 author: yhfwww
 license: Apache-2.0
@@ -27,10 +27,12 @@ license: Apache-2.0
 project-root/
 ├── PROJECT_STATE.md                          ← 根目录，最高可见性
 ├── docs/
-│   ├── CHANGELOG_FOR_AGENT.md                ← 活跃层，保持最新 20 条
+│   ├── CHANGELOG_FOR_AGENT.md                ← 活跃层，保持最新 20 条/500行
 │   ├── CHANGELOG_FOR_HUMAN.md
 │   ├── CHANGELOG_FOR_AGENT.archive.md        ← 近期存档，最多 100 条
-│   └── CHANGELOG_FOR_AGENT.archive.2.md ...  ← 按序溢出，按需创建
+│   ├── CHANGELOG_FOR_AGENT.archive.2.md ...  ← 按序溢出，按需创建
+│   ├── CHANGELOG_FOR_HUMAN.archive.md        ← 人类向近期存档
+│   └── CHANGELOG_FOR_HUMAN.archive.2.md ...  ← 人类向按序溢出
 └── ...
 ```
 
@@ -78,6 +80,38 @@ project-root/
 
 ---
 
+## 首次使用引导
+
+### 用户第一次使用时如何触发
+
+在一个新项目（或已有项目但尚未使用 changelog-keeper）中，用户可以通过以下任一方式触发初始化：
+
+- **明确指令**：说「初始化 changelog」、「启动 changelog-keeper」、「创建项目状态记录」
+- **间接触发**：当用户第一次说「记录这次改动」、「checkpoint」等触发词时，自动检测到没有 changelog 文件，先执行初始化流程
+
+### 追溯性初始化流程（已有代码项目）
+
+如果用户在项目已经开发了一段时间后才引入 changelog-keeper，需要先生成一条「项目初始状态」的 baseline 记录，而不是从空白开始：
+
+1. **扫描项目现状**：
+   - 识别项目主要技术栈（通过 package.json/pyproject.toml/go.mod 等）
+   - 扫描核心文件和目录结构
+   - 分析已有模块和功能
+
+2. **生成 baseline 记录**：
+   - 版本号：v0.1.0（或项目已有版本号）
+   - 变更摘要：「项目初始状态记录」
+   - 改动文件：列出所有核心文件（注明「初始状态」）
+   - 核心变化：描述项目当前已实现的主要功能
+   - 设计决策：记录已有的关键架构选择
+
+3. **完整初始化**：
+   - 创建三个标准文件（PROJECT_STATE.md、docs/CHANGELOG_FOR_AGENT.md、docs/CHANGELOG_FOR_HUMAN.md）
+   - 执行「新 Session 读取端激活」（向 AGENTS.md 等追加引导段）
+   - 完整填写 PROJECT_STATE.md 的所有区块
+
+---
+
 ## 写入流程
 
 ### Step 1：分析本次改动
@@ -118,6 +152,18 @@ project-root/
 ### Step 3：追加写入变更记录
 
 向 `docs/CHANGELOG_FOR_AGENT.md` 和 `docs/CHANGELOG_FOR_HUMAN.md` **追加新记录到文件顶部**（最新的在最前）。
+
+### Step 3.5：归档检查与精华蒸馏
+
+追加记录后，立即检查两个 changelog 文件是否触发归档阈值：
+
+- **CHANGELOG_FOR_AGENT.md**：检查是否超过 500 行 或 记录条数 > 20（满足任一条件即触发）
+- **CHANGELOG_FOR_HUMAN.md**：检查是否超过 300 行（满足即触发）
+
+如果触发归档：
+1. 对即将归档的记录执行**精华蒸馏**（仅 CHANGELOG_FOR_AGENT.md），提取重要设计决策追加到 `PROJECT_STATE.md`
+2. 将溢出记录移入对应的 `*.archive.md` 文件
+3. 更新活跃层文件顶部的归档索引注释
 
 ### Step 4：更新 PROJECT_STATE.md
 
@@ -219,7 +265,6 @@ _最后更新：[日期时间]_
 
 - 无
 
-```
 
 ---
 
@@ -362,9 +407,7 @@ changelog-keeper 在**首次初始化**时（见「写入流程 Step 2」），�
 - 追加前检查文件中是否已存在 `changelog-keeper` 关键词，**避免重复追加**
 - 如果用户明确表示「不要修改 AGENTS.md / CLAUDE.md」，跳过此步骤并告知用户需要手动添加引导段
 
----
-
-## 接手项目时的引导
+### 新 Agent 接手项目引导
 
 当新 Agent 接手一个已有这三个文件的项目时（无论是否使用本 skill），应优先读取：
 1. `PROJECT_STATE.md`（根目录）— 理解当前状态（最重要，先读这个）
@@ -380,13 +423,15 @@ changelog-keeper 在**首次初始化**时（见「写入流程 Step 2」），�
 
 **存档分层机制（滚动归档）**
 
-`docs/CHANGELOG_FOR_AGENT.md` 是**活跃层**，始终只保留最新 20 条记录，保持轻量可读。当记录数超过 20 条时，触发归档流程：
+`docs/CHANGELOG_FOR_AGENT.md` 是**活跃层**，以 500 行为主触发条件，记录条数 > 20 为辅助兜底（满足任一条件即触发归档），保持轻量可读。触发归档流程：
 
 ```
-归档触发条件：docs/CHANGELOG_FOR_AGENT.md 超过 500 行 或 记录条数 > 20
+归档触发条件：
+- CHANGELOG_FOR_AGENT.md：超过 500 行 或 记录条数 > 20（取其先触发）
+- CHANGELOG_FOR_HUMAN.md：超过 300 行
 
 归档流程：
-1. 将活跃层中最早的溢出记录移入 docs/CHANGELOG_FOR_AGENT.archive.md
+1. 将活跃层中最早的溢出记录移入对应的 *.archive.md
 2. 如果 archive.md 自身超过 2000 行 → 滚动到 archive.2.md，依此类推
 3. 在活跃层文件顶部更新归档索引注释：
    > 历史记录已归档（共 N 条）：

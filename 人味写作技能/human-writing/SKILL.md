@@ -1,6 +1,10 @@
 ---
 name: human-writing
+version: 1.0.0
 description: 双模式人类化写作：写作模式（从零创作有人味文章）+ 润色模式（去除AI味优化文本），基于人类反馈的AI味定义，段落式写作，对抗AI检测，支持个性化学习。
+homepage: https://github.com/yhfwww/5kill5-skills
+author: yhfwww
+license: Apache-2.0
 ---
 
 # 人类化写作辅助

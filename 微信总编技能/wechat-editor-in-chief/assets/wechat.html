@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>@@TITLE@@</title>
+<style>body{margin:0;background:#eef2f5;font-family:system-ui,'Microsoft YaHei',sans-serif;color:#273345}.tools,.paper{max-width:765px;margin:20px auto;padding:24px;box-sizing:border-box;background:white;border-radius:12px}button{padding:10px 16px;margin:4px;border:0;border-radius:6px;background:#176b54;color:white;cursor:pointer}h1{font-size:28px;overflow-wrap:anywhere}summary{cursor:pointer}#status{font-size:14px;line-height:1.7}a{overflow-wrap:anywhere}@media(max-width:600px){.tools,.paper{margin:10px;padding:18px}h1{font-size:24px}}</style></head><body>
+<aside class="tools"><button id="copy-title">复制标题</button><button id="copy-body">复制正文（带格式）</button><p id="status" role="status">粘贴到公众号编辑器后，请检查图片和手机预览；缺图时用下方原图替换。</p><details><summary>摘要、评论区建议与图片下载</summary>@@EXTRAS@@</details></aside>
+<main class="paper"><h1 id="article-title">@@TITLE@@</h1>@@BODY@@</main>
+<script>
+const statusEl=document.getElementById('status');
+function selectContent(el){const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r);}
+async function copyContent(el,rich){
+ const plain=el.innerText,markup=el.outerHTML;
+ try{
+  if(!navigator.clipboard)throw Error('unavailable');
+  if(rich){if(!window.ClipboardItem)throw Error('unavailable');await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([markup],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);}
+  else await navigator.clipboard.writeText(plain);
+ }catch(e){
+  selectContent(el);let populated=false,ok=false;
+  const handler=ev=>{if(ev.clipboardData){ev.clipboardData.setData('text/plain',plain);if(rich)ev.clipboardData.setData('text/html',markup);ev.preventDefault();populated=true;}};
+  document.addEventListener('copy',handler);
+  try{ok=document.execCommand('copy')&&populated;}catch(e){}finally{document.removeEventListener('copy',handler);}
+  if(!ok){statusEl.textContent='自动复制未成功，内容已选中，请按 Ctrl+C（Mac 用 Cmd+C），再粘贴。';return;}
+  window.getSelection().removeAllRanges();
+ }
+ statusEl.textContent=rich?'正文已复制（带格式）。粘贴后检查图片；缺图时下载原图上传替换。':'标题已复制。';
+}
+document.getElementById('copy-body').onclick=()=>copyContent(document.getElementById('wechat-body'),true);
+document.getElementById('copy-title').onclick=()=>copyContent(document.getElementById('article-title'),false);
+document.querySelectorAll('[data-image]').forEach(button=>button.onclick=()=>{const a=document.createElement('a');a.href=document.getElementById(button.dataset.image).src;a.download=button.dataset.filename;document.body.appendChild(a);a.click();a.remove();});
+</script></body></html>

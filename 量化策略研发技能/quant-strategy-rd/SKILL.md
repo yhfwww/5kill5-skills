@@ -37,9 +37,23 @@ description: 研究、构建或审查量化交易策略及交易执行系统，�
 
 将信号、目标仓位、风险检查和订单执行分层。风险上限必须使用交易所实际账户与持仓数据，并且不能被网页参数或普通策略配置绕过。
 
+## 研究数据源与微观结构数据
+
+先阅读 [市场数据源适配](references/market-data-source-adapters.md) 和
+[市场数据质量闸门](references/market-data-quality-gates.md)。研究必须把数据源当作可替换的适配层，不能把某个供应商的字段、覆盖范围或接口行为写死到策略逻辑中。
+
+- 先明确交易所、市场类型、品种、数据集、UTC 区间、事件时钟和允许数据年龄，再发现精确 symbol 并下载；不要从交易对名称推断数据存在或覆盖连续。
+- 先做小范围样本验证，再扩大到多小时、多品种或多交易所下载；必须记录请求区间、实际获得区间、缺失文件、空文件、部分覆盖和失败重试。
+- 逐文件检查实际 Parquet schema、行数、时间范围、字段单位与精度。下载成功、symbol 存在或 ingestion status 正常都不能单独证明历史完整或可重放。
+- 对逐笔成交、L2 orderbook、mark/funding、open interest 和 liquidations，必须按数据集语义选择用途；跨交易所比较前显式核对数量单位、合约乘数、资金费率口径、时间戳单位和来源修订。
+- 订单簿研究必须验证 snapshot、update、序列号、reset、重连和断点规则；发现序列断裂或无法证明重放有效时，停止产生 spread、depth 或滑点结论。
+- 为研究数据建立可追溯快照，关联供应商、SDK/接口版本、查询参数、对象路径、文件哈希、schema 摘要、下载时间和缺口/修订检查结果。
+
+CryptoHFTData 可作为上述适配层的一个具体实现：它提供多交易所的逐笔成交、L2 订单簿、ticker、mark price/funding、open interest 和 liquidation 历史文件，并支持 Python SDK、REST 与 S3；不因此获得下单、钱包、账户管理或盈利保证能力。具体流程见 [CryptoHFTData 适配说明](references/market-data-source-adapters.md)。
+
 ## 研究、回测与 shadow 验证
 
-先阅读 [研究与验证](references/research-and-validation.md)；在制定或审查历史研究、回放、成本模型、参数实验或上线门槛时按其中的证据与验证方法执行。
+先阅读 [研究与验证](references/research-and-validation.md)、[数据来源快照与追踪](references/data-provenance-and-snapshots.md) 和 [微观结构研究](references/microstructure-research.md)；在制定或审查历史研究、回放、成本模型、参数实验或上线门槛时按其中的证据与验证方法执行。
 
 对于新策略或信号、数据、交易宇宙、风险预算、成本口径的实质变更，先阅读 [策略治理与研究完整性](references/strategy-governance-and-research-integrity.md)。创建或更新策略卡、实验登记和准入状态；这些文件让研究结论、当前实现、风险所有者和恢复条件保持可区分、可追溯。
 

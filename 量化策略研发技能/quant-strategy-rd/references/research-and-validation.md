@@ -4,6 +4,10 @@
 
 ## 1. 建立可复现的研究记录
 
+研究开始前先完成数据源适配和质量闸门：明确供应方、交易所/市场、数据集、精确 symbol、UTC 区间、事件时钟、允许延迟、获取方式、SDK/API 版本和已知修订。先验证一个小样本文件，再扩大下载；不得把接口成功、symbol 存在或返回非空 DataFrame 当作覆盖完整的证据。详细要求见 [市场数据源适配](market-data-source-adapters.md)、[市场数据质量闸门](market-data-quality-gates.md) 和 [数据来源快照与追踪](data-provenance-and-snapshots.md)。
+
+对逐笔成交、订单簿、mark/funding、OI 和 liquidation 等数据，保存真实文件 schema、时间戳单位、数量/合约单位、来源修订状态与缺口清单。若数据源发布修订，必须标记受影响实验并决定是否重跑，不能静默覆盖旧结果。
+
 每一个结论至少关联以下信息：
 
 | 内容 | 应保存的证据 |
